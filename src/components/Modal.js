@@ -11,6 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Paper from '@material-ui/core/Paper';
 import Draggable from 'react-draggable';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles((theme) => ({
     fab: {
@@ -65,20 +66,36 @@ export default function Modal() {
         aria-labelledby="draggable-dialog-title"
       >
         <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-          Subscribe
+          Notes
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here. We will send updates
-            occasionally.
+            Add Notes for better management
           </DialogContentText>
+          <form noValidate autoComplete="off">
+              <TextField 
+              id="standard-basic" 
+              label="Note Title" 
+              fullWidth
+              style={{ margin: 8 }}
+              />
+
+              <TextField
+              id="standard-textarea"
+              label="Note Description"
+              multiline
+              fullWidth
+              style={{ margin: 8 }}
+
+        />
+            </form>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose} color="primary">
             Cancel
           </Button>
           <Button onClick={handleClose} color="primary">
-            Subscribe
+            Submit
           </Button>
         </DialogActions>
       </Dialog>
