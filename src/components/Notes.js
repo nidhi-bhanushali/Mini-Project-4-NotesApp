@@ -2,26 +2,28 @@ import React , {useState , useEffect} from 'react';
 import { Container } from '@material-ui/core';
 import Modal from './Modal';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import NotesList from './NotesList'
 
 const useStyles = makeStyles({
-    root: {
-      minWidth: 275,
-      margin: 15,
-      flexGrow: 1,
-    },
-    title: {
-      fontSize: 14,
-    },
+    textfield : {
+      '& > *': {
+        // margin: theme.spacing(1),
+        width: '100%', 
+      },
+    }
   });
 
 const Notes = () => {
     const classes = useStyles();
     const [notes , setNotes] = useState([]);
+    const [searchNote, setSearchNote] = useState("");
+    const [results, setResults] = useState([]);
+
+    const onChange = (e) => {
+      setSearchNote(e.target.value);
+    }
+  
 
     const addNote = (note) => {
         const newNotes = ([...notes , note])
@@ -29,37 +31,42 @@ const Notes = () => {
         localStorage.setItem('notes', JSON.stringify(newNotes));
     }
 
+
+  
     useEffect(() => {
         const noteEl = JSON.parse(localStorage.getItem("notes"));
         if (noteEl) {
           setNotes(noteEl);
+
+          const result = noteEl.filter(({title}) => title.toLowerCase().includes(searchNote.toLowerCase())
+            // console.log(note.title)
+          );
+          console.log(result)
+          setResults(result);
         }
-      }, [])
+      }, [searchNote])
 
     return (
-
+        <div>
+          <form className={classes.textfield} 
+             noValidate 
+             autoComplete="off" 
+             style={{ margin: 20 }}
+             value={searchNote}
+             onChange={onChange}
+             >
+             <TextField id="standard-basic" label="Search note" />
+           </form>
+        
         <Container maxWidth = 'sm' >
             {
-            notes !== null ? notes.map((note,index) => (
-            <Grid container spacing={2}>
-            <Grid item xs>
-            <Card className={classes.root} key={index} > 
-            <CardContent>
-            <Typography className={classes.title} color="textSecondary" gutterBottom>
-                {note.title}
-            </Typography>
-            <Typography variant="body2" component="p">
-                {note.desc}
-            </Typography>
-            </CardContent>
-            </Card>
-            </Grid>
-            </Grid>)
-            ) :
-             console.log('hello')}
+            searchNote ?  <NotesList notes = {results}/> : <NotesList notes = {notes}/>}
             <Modal addNote = {addNote}/>
         </Container >
+        </div>
     )
 }
+
+
 
 export default Notes

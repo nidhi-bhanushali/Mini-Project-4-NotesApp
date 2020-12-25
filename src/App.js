@@ -1,17 +1,15 @@
 import React , { useEffect } from 'react'
-import Notes from './components/Notes'
+import Notes from './components/Notes';
 
 function App() {
-
   useEffect(() => {
-    
     <Notes/>
   }, [])
 
   return (
-    <div className="App">
+      <div>
       <Notes/>
-    </div>
+      </div>
   );
 }
 
